@@ -1,5 +1,11 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintStream;
+
+import it.unibo.oop.lab.iogui.BadIOGUI;
+
 /**
  * 
  */
@@ -27,5 +33,48 @@ public class Controller {
      * System.getProperty("file.separator"). The combined use of those methods leads
      * to a software that runs correctly on every platform.
      */
+    private File file;
 
+    public Controller() {
+        file = new File(System.getProperty("user.home")
+            + System.getProperty("file.separator")
+            + "output.txt");
+    }
+
+    /** 
+     * @param newFile
+     *      reference to the file to be set as current file
+     */
+    public void setCurrentFile(final File newFile) {
+        file = newFile;
+    }
+
+    /**
+     * 
+     * @return
+     *      returns current file
+     */
+    public File getCurrentFile() {
+        return this.file;
+    }
+
+    /**
+     * @return
+     *      returns the path of the current File
+     */
+    public String getPath() {
+        return this.file.getAbsolutePath();
+    }
+
+    /**
+     * 
+     * @param line
+     *      string to be written to the file
+     * @throws IOException
+     */
+    public void writeString(final String line) throws IOException {
+        try (PrintStream ps = new PrintStream(file)) {
+            ps.print(line);
+        }
+    }
 }
