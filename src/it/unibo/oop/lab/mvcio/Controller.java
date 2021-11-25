@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import it.unibo.oop.lab.iogui.BadIOGUI;
-
 /**
  * 
  */
@@ -74,7 +72,7 @@ public class Controller {
      */
     public void writeString(final String line) throws IOException {
         try (PrintStream ps = new PrintStream(file)) {
-            ps.print(line);
+            ps.println(line);
         }
     }
 }
