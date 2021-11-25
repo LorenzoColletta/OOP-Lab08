@@ -2,8 +2,15 @@ package it.unibo.oop.lab.mvcio;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A very simple program using a graphical interface.
@@ -57,6 +64,33 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        final Controller fileController = new Controller();
+        final JPanel canvas = new JPanel();
+        canvas.setLayout(new BorderLayout());
+        final JButton save = new JButton("Save");
+        final JTextArea write = new JTextArea();
+        canvas.add(write, BorderLayout.NORTH);
+        canvas.add(save, BorderLayout.CENTER);
+        frame.setContentPane(canvas);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    fileController.writeString(write.getText());
+                } catch (IOException e1) {
+                    System.out.println("Error: " + e1.getMessage());
+                }
+            }
+        });
+    }
+
+    private void display() {
+        frame.setVisible(true);
+    }
+
+    public static void main(final String[] args) {
+        final SimpleGUI writeText = new SimpleGUI();
+        writeText.display();
     }
 
 }
