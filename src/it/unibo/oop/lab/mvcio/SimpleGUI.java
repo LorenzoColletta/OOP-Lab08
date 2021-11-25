@@ -18,7 +18,7 @@ import javax.swing.JTextArea;
  */
 public final class SimpleGUI {
 
-    private final JFrame frame = new JFrame();
+    private final JFrame frame = new JFrame("MY first Java graphical interface");
 
     /*
      * Once the Controller is done, implement this class in such a way that:
@@ -69,14 +69,16 @@ public final class SimpleGUI {
         canvas.setLayout(new BorderLayout());
         final JButton save = new JButton("Save");
         final JTextArea write = new JTextArea();
-        canvas.add(write, BorderLayout.NORTH);
-        canvas.add(save, BorderLayout.CENTER);
+        canvas.add(write, BorderLayout.CENTER);
+        canvas.add(save, BorderLayout.SOUTH);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
         save.addActionListener(new ActionListener() {
             public void actionPerformed(final ActionEvent e) {
                 try {
                     fileController.writeString(write.getText());
+                    write.setText("");
                 } catch (IOException e1) {
                     System.out.println("Error: " + e1.getMessage());
                 }
