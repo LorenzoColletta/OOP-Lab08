@@ -1,10 +1,16 @@
 package it.unibo.oop.lab.advanced;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  */
@@ -15,47 +21,63 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
 //    private static final int ATTEMPTS = 10;
 //    private final Configuration config;
     private final DrawNumber model;
-    private final DrawNumberView view;
+//    private final DrawNumberView view;
+    private final List<DrawNumberView> views;
 
     /**
      * @param fileConfig
      *      file to retrieve configuration from
      */
-    public DrawNumberApp(final String fileConfig) {
-        this.view = new DrawNumberViewImpl();
-        this.view.setObserver(this);
-        this.view.start();
+    public DrawNumberApp(final String fileConfig, final DrawNumberView... args) {
+        this.views = Arrays.asList(Arrays.copyOf(args, args.length));
+        for (DrawNumberView i : views) {
+            i.setObserver(this);
+            i.start();
+        }
+
         var min = 0;
         var max = 0;
         var attempts = 0;
-        try (BufferedReader configReader = new BufferedReader(new InputStreamReader(new FileInputStream(fileConfig)))) {
+        try (BufferedReader configReader = new BufferedReader(new InputStreamReader(ClassLoader.getSystemResourceAsStream(fileConfig)))) {
             for (String line = configReader.readLine(); line != null; line = configReader.readLine()) {
                 if (line.contains("max")) {
-                    max = Integer.parseInt(line.replaceFirst("max: ", ""));
+                    max = Integer.parseInt(line.replaceFirst("maximum: ", ""));
                 } else if (line.contains("attempts")) {
                     attempts = Integer.parseInt(line.replaceFirst("attempts: ", ""));
                 } else if (line.contains("min")) {
-                    min = Integer.parseInt(line.replaceFirst("min: ", ""));
+                    min = Integer.parseInt(line.replaceFirst("minimum: ", ""));
                 } else {
-                    this.view.displayError("Wrong file format.");
+                    this.displayError("Wrong file format.");
                 }
             }
         } catch (IOException e1) {
-            this.view.displayError("IO Error: " + e1.getMessage());
+            this.displayError("IO Error: " + e1.getMessage());
         }
         this.model = new DrawNumberImpl(min, max, attempts);
 
+    }
+
+    private void displayError(final String error) {
+        for (final DrawNumberView i : views) {
+            i.displayError(error);
+        }
     }
 
     @Override
     public void newAttempt(final int n) {
         try {
             final DrawResult result = model.attempt(n);
-            this.view.result(result);
+            for (final DrawNumberView view: views) {
+                view.result(result);
+            }
         } catch (IllegalArgumentException e) {
-            this.view.numberIncorrect();
-        } catch (AttemptsLimitReachedException e) {
-            view.limitsReached();
+            for (final DrawNumberView view: views) {
+                view.numberIncorrect();
+            }
+        } catch (AttemptsLimitReachedException e1) {
+            for (final DrawNumberView view: views) {
+                view.limitsReached();
+            }
         }
     }
 
@@ -74,7 +96,11 @@ public final class DrawNumberApp implements DrawNumberViewObserver {
      *            ignored
      */
     public static void main(final String... args) {
-        new DrawNumberApp("config.yml");
+        try {
+            new DrawNumberApp("config.yml", new DrawNumberViewImpl(), new DrawNumberViewSpecific(new PrintStream(new FileOutputStream(new File("File.log")))), new DrawNumberViewSpecific(System.out));
+        } catch (FileNotFoundException e) {
+            System.out.println("ERROR: " + e.getMessage());
+        }
     }
 
 }
