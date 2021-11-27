@@ -1,45 +1,43 @@
 package it.unibo.oop.lab.advanced;
 
-public class DrawNumberViewSpecific implements DrawNumberView {
+import java.io.PrintStream;
 
-    public DrawNumberViewSpecific() {
-        // TODO Auto-generated constructor stub
+public class DrawNumberViewSpecific implements DrawNumberView {
+    
+    private PrintStream output;
+
+    public DrawNumberViewSpecific(final PrintStream output) {
+        this.output = output;
     }
 
     @Override
-    public void setObserver(DrawNumberViewObserver observer) {
-        // TODO Auto-generated method stub
+    public void setObserver(final DrawNumberViewObserver observer) {
 
     }
 
     @Override
     public void start() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void numberIncorrect() {
-        // TODO Auto-generated method stub
-
+        output.print("Incorrect number. Try again!");
     }
 
     @Override
-    public void result(DrawResult res) {
-        // TODO Auto-generated method stub
-
+    public void result(final DrawResult res) {
+        output.print("Result: " + res.getDescription());
     }
 
     @Override
     public void limitsReached() {
-        // TODO Auto-generated method stub
-
+        output.print("You Lost");
     }
 
     @Override
-    public void displayError(String message) {
-        // TODO Auto-generated method stub
-
+    public void displayError(final String message) {
+        output.print("An Error has occurred: " + message);
     }
 
 }
