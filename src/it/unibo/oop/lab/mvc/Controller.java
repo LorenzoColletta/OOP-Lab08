@@ -26,10 +26,25 @@ public interface Controller {
      * an IllegalStateException should be thrown
      * 
      */
+    /**
+     * 
+     * @param next
+     *      next string to print. Null pointer is not accepted.
+     */
     void setNextString(String next);
 
+    /**
+     * 
+     * @return
+     *      next string to print
+     */
     String getNextString();
 
+    /**
+     * 
+     * @return
+     *      list of printed strings
+     */
     List<String> getHistory();
 
     void printCurrentString();
