@@ -12,7 +12,6 @@ public class ControllerImpl implements Controller {
 
     public ControllerImpl() {
         this.history = new ArrayList<>();
-        this.next = "";
     }
 
     /**
@@ -45,7 +44,7 @@ public class ControllerImpl implements Controller {
 
     @Override
     public void printCurrentString() {
-        if (this.next.isEmpty()) {
+        if (this.next == null) {
             throw new IllegalStateException();
         }
         this.history.add(this.next);
