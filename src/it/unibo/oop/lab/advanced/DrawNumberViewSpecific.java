@@ -22,22 +22,22 @@ public class DrawNumberViewSpecific implements DrawNumberView {
 
     @Override
     public void numberIncorrect() {
-        output.print("Incorrect number. Try again!");
+        output.println("Incorrect number. Try again!");
     }
 
     @Override
     public void result(final DrawResult res) {
-        output.print("Result: " + res.getDescription());
+        output.println("Result: " + res.getDescription());
     }
 
     @Override
     public void limitsReached() {
-        output.print("You Lost");
+        output.println("You Lost");
     }
 
     @Override
     public void displayError(final String message) {
-        output.print("An Error has occurred: " + message);
+        output.println("An Error has occurred: " + message);
     }
 
 }
