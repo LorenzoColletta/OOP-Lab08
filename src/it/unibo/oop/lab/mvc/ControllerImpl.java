@@ -7,8 +7,8 @@ import java.util.Queue;
 
 public class ControllerImpl implements Controller {
 
-    private List<String> history;
-    private Queue<String> next;
+    private final List<String> history;
+    private final Queue<String> next;
 
     public ControllerImpl() {
         history = new ArrayList<>();
@@ -36,15 +36,21 @@ public class ControllerImpl implements Controller {
         }
     }
 
+
     @Override
     public List<String> getHistory() {
-        // TODO Auto-generated method stub
-        return null;
+        return List.copyOf(history);
     }
+
 
     @Override
     public void printCurrentString() {
-        // TODO Auto-generated method stub
+        if (this.next.isEmpty()) {
+            throw new IllegalStateException();
+        }
+        final String currentString = this.next.poll();
+        System.out.println(currentString);
+        this.history.add(currentString);
 
     }
 
