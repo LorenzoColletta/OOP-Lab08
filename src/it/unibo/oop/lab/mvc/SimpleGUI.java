@@ -2,7 +2,8 @@ package it.unibo.oop.lab.mvc;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -58,14 +59,24 @@ public final class SimpleGUI {
         final int sh = (int) screen.getHeight();
         frame.setSize(sw / 2, sh / 2);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        
-        JPanel canvas = new JPanel();
-        JButton print = new JButton("Print");
-        JButton showHs = new JButton("Show History");
-        JTextArea hsArea = new JTextArea();
-        JTextField inptString = new JTextField();
-        
+
+
+        final JPanel canvas = new JPanel();
+        final JPanel innerCanvas = new JPanel();
+        final JButton print = new JButton("Print");
+        final JButton showHs = new JButton("Show History");
+        final JTextArea hsArea = new JTextArea();
+        final JTextField inptString = new JTextField();
+
+
+        frame.add(canvas);
+        canvas.setLayout(new BorderLayout());
+        canvas.add(inptString, BorderLayout.NORTH);
+        canvas.add(hsArea, BorderLayout.CENTER);
+        innerCanvas.setLayout(new FlowLayout());
+        canvas.add(innerCanvas, BorderLayout.SOUTH);
+        innerCanvas.add(print);
+        innerCanvas.add(showHs);
 
         /*
          * Instead of appearing at (0,0), upper left corner of the screen, this
@@ -73,14 +84,15 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-    
+
     private void display() {
-        
+        frame.setVisible(true);
     }
-    
-    public static main(String... args) {
-        
+
+    public static void main(final String... args) {
+        new SimpleGUI().display();
     }
 
 }
