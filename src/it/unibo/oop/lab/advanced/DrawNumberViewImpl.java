@@ -34,15 +34,20 @@ public final class DrawNumberViewImpl implements DrawNumberView {
         final JPanel pNorth = new JPanel(new FlowLayout());
         final JTextField tNumber = new JTextField(10);
         final JButton bGo = new JButton(GO);
+
         pNorth.add(tNumber);
         pNorth.add(bGo);
+
         final JPanel pSouth = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         final JButton bReset = new JButton(RESET);
         final JButton bQuit = new JButton(QUIT);
+
         pSouth.add(bReset);
         pSouth.add(bQuit);
+
         frame.getContentPane().add(pNorth, BorderLayout.NORTH);
         frame.getContentPane().add(pSouth, BorderLayout.SOUTH);
+
         bGo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -118,5 +123,10 @@ public final class DrawNumberViewImpl implements DrawNumberView {
 
     private void plainMessage(final String msg) {
         JOptionPane.showMessageDialog(frame, msg, "Result", JOptionPane.PLAIN_MESSAGE);
+    }
+
+    @Override
+    public void displayError(String message) {
+        JOptionPane.showMessageDialog(frame, message, "I/O", JOptionPane.ERROR_MESSAGE);
     }
 }
