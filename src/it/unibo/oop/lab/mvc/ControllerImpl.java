@@ -8,11 +8,11 @@ import java.util.Queue;
 public class ControllerImpl implements Controller {
 
     private final List<String> history;
-    private final Queue<String> next;
+    private String next;
 
     public ControllerImpl() {
-        history = new ArrayList<>();
-        next = new LinkedList<>();
+        this.history = new ArrayList<>();
+        this.next = "";
     }
 
     /**
@@ -24,7 +24,7 @@ public class ControllerImpl implements Controller {
         if (next == null) {
             throw new NullPointerException();
         }
-        this.next.add(next);
+        this.next = next;
     }
 
     @Override
@@ -32,7 +32,7 @@ public class ControllerImpl implements Controller {
         if (this.next.isEmpty()) {
             return null;
         } else {
-            return this.next.element();
+            return this.next;
         }
     }
 
@@ -48,10 +48,9 @@ public class ControllerImpl implements Controller {
         if (this.next.isEmpty()) {
             throw new IllegalStateException();
         }
-        final String currentString = this.next.poll();
-        System.out.println(currentString);
-        this.history.add(currentString);
-
+        this.history.add(this.next);
+        System.out.println(this.next);
+        this.next = "";
     }
 
 }
