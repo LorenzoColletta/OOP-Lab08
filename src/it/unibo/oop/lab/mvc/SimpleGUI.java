@@ -3,7 +3,11 @@ package it.unibo.oop.lab.mvc;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * A very simple program using a graphical interface.
@@ -11,7 +15,7 @@ import javax.swing.JFrame;
  */
 public final class SimpleGUI {
 
-    private final JFrame frame = new JFrame();
+    private final JFrame frame = new JFrame("Simple GUI");
 
     /*
      * Once the Controller is done, implement this class in such a way that:
@@ -53,6 +57,15 @@ public final class SimpleGUI {
         final int sw = (int) screen.getWidth();
         final int sh = (int) screen.getHeight();
         frame.setSize(sw / 2, sh / 2);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        
+        JPanel canvas = new JPanel();
+        JButton print = new JButton("Print");
+        JButton showHs = new JButton("Show History");
+        JTextArea hsArea = new JTextArea();
+        JTextField inptString = new JTextField();
+        
 
         /*
          * Instead of appearing at (0,0), upper left corner of the screen, this
@@ -60,6 +73,14 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+    }
+    
+    private void display() {
+        
+    }
+    
+    public static main(String... args) {
+        
     }
 
 }
