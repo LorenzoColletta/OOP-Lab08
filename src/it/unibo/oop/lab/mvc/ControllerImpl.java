@@ -15,16 +15,25 @@ public class ControllerImpl implements Controller {
         next = new LinkedList<>();
     }
 
+    /**
+     * @param next
+     *      next string to print
+     */
     @Override
-    public void setNextString(String next) {
-        // TODO Auto-generated method stub
-
+    public void setNextString(final String next) {
+        if (next == null) {
+            throw new NullPointerException();
+        }
+        this.next.add(next);
     }
 
     @Override
     public String getNextString() {
-        // TODO Auto-generated method stub
-        return null;
+        if (this.next.isEmpty()) {
+            return null;
+        } else {
+            return this.next.element();
+        }
     }
 
     @Override
