@@ -2,6 +2,9 @@ package it.unibo.oop.lab.mvc;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -42,7 +45,7 @@ public final class SimpleGUI {
     /**
      * builds a new {@link SimpleGUI}.
      */
-    public SimpleGUI() {
+    public SimpleGUI(Controller ctrlIO) {
 
         /*
          * Make the frame half the resolution of the screen. This very method is
@@ -78,6 +81,30 @@ public final class SimpleGUI {
         innerCanvas.add(print);
         innerCanvas.add(showHs);
 
+        hsArea.setEditable(false);
+        print.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ctrlIO.setNextString(inptString.getText());
+                ctrlIO.printCurrentString();
+            }
+        });
+        showHs.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e1) {
+                final List<String> hs = ctrlIO.getHistory();
+                if (hs == null) {
+                    hsArea.setText("No strings were printed.");
+                } else {
+                    String output = "";
+                    for (final var i : hs) {
+                        output += "\n" + i;
+                    }
+                    hsArea.setText(output);
+                }
+            }
+        });
+
         /*
          * Instead of appearing at (0,0), upper left corner of the screen, this
          * flag makes the OS window manager take care of the default positioning
@@ -92,7 +119,7 @@ public final class SimpleGUI {
     }
 
     public static void main(final String... args) {
-        new SimpleGUI().display();
+        new SimpleGUI(new ControllerImpl()).display();
     }
 
 }
