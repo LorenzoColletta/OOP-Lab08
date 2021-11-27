@@ -1,11 +1,26 @@
 package it.unibo.oop.lab.mvcio2;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
+import it.unibo.oop.lab.mvcio.Controller;
+
 /**
  * A very simple program using a graphical interface.
  * 
  */
 public final class SimpleGUIWithFileChooser {
-
     /*
      * TODO: Starting from the application in mvcio:
      * 
@@ -31,5 +46,69 @@ public final class SimpleGUIWithFileChooser {
      * update the UI: in this example the UI knows when should be updated, so
      * try to keep things separated.
      */
+    private final JFrame frame = new JFrame("MY first Java graphical interface");
 
+    /**
+     * builds a new {@link SimpleGUI}.
+     *
+     */
+    public SimpleGUIWithFileChooser(final Controller fileController) {
+
+        final Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
+        final int sw = (int) screen.getWidth();
+        final int sh = (int) screen.getHeight();
+        frame.setSize(sw / 2, sh / 2);
+        frame.setLocationByPlatform(true);
+
+        final JPanel canvas = new JPanel();
+        final JButton save = new JButton("Save");
+        final JTextArea write = new JTextArea();
+        final JPanel innerCanvas = new JPanel();
+        final JButton browse = new JButton("Browse");
+        final JTextField displayFile = new JTextField();
+        final JFileChooser fileChooser = new JFileChooser(fileController.getPath());
+
+        canvas.setLayout(new BorderLayout());
+        canvas.add(write, BorderLayout.CENTER);
+        canvas.add(save, BorderLayout.SOUTH);
+        canvas.add(innerCanvas, BorderLayout.NORTH);
+        innerCanvas.setLayout(new BorderLayout());
+        innerCanvas.add(browse, BorderLayout.LINE_END);
+        innerCanvas.add(displayFile, BorderLayout.CENTER);
+
+        displayFile.setEnabled(false);
+        displayFile.setText(fileController.getPath());
+
+        frame.setContentPane(canvas);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        browse.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                fileChooser.setSelectedFile(fileController.getCurrentFile());
+                if (fileChooser.showSaveDialog(fileChooser) == JFileChooser.APPROVE_OPTION) {
+                    fileController.setCurrentFile(fileChooser.getSelectedFile());
+                    displayFile.setText(fileController.getPath());
+                }
+            }
+        });
+        save.addActionListener(new ActionListener() {
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    fileController.writeString(write.getText());
+                    write.setText("");
+                } catch (IOException e1) {
+                    System.out.println("Error: " + e1.getMessage());
+                }
+            }
+        });
+    }
+
+    private void display() {
+        frame.setVisible(true);
+    }
+
+    public static void main(final String... args) {
+        final SimpleGUIWithFileChooser simpleGui = new SimpleGUIWithFileChooser(new Controller());
+        simpleGui.display();
+    }
 }
